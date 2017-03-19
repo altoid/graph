@@ -85,13 +85,15 @@ class TestUGraph(unittest.TestCase):
         
         g.addNode(n1)
         self.assertEqual(1, len(g.nodes()))
-        
-        g.addNode(n1)
-        self.assertEqual(1, len(g.nodes()))
+
+        with self.assertRaises(graph.GraphException):
+            g.addNode(n1)
 
         n2 = graph.Node('a')
 
-        g.addNode(n2)
+        with self.assertRaises(graph.GraphException):
+            g.addNode(n2)
+
         self.assertEqual(1, len(g.nodes()))
 
         n3 = graph.Node('b')
@@ -106,7 +108,6 @@ class TestUGraph(unittest.TestCase):
         self.assertFalse(g.contains(n4))
         
     def test_addEdge(self):
-
         g = graph.UGraph()
         a = graph.Node('a')
         b = graph.Node('b')

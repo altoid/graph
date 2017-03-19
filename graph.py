@@ -1,5 +1,8 @@
 import pprint
 import collections
+import pdb
+
+pp = pprint.PrettyPrinter()        
 
 class GraphException(Exception):
     pass
@@ -71,69 +74,39 @@ class DGraph(object):
         self.adj_list[a].append(edge)
 
     def dump(self):
-        pp = pprint.PrettyPrinter()        
         pp.pprint(self.adj_list)
 
-
-class UGraph(object):
-    '''
-    implements an undirected graph.  there can be at most one # edge
-    directly connecting two nodes.
-    '''
-    # implemented as a dictionary that maps nodes to sets
-    # of nodes.  the sets represent adjacent nodes.
-    # this is an undirected graph, so for an edge between two
-    # nodes, each appears as a key and is in the other's adjacency
-    # set.  because we are using a set, there can be at most one
-    # edge directly connecting two nodes.
-
-    def __init__(self):
-        self.adj_list = {}
-
-    def addNode(self, n):
-        if n not in self.adj_list:
-            self.adj_list[n] = set()
-
-    def contains(self, n):
-        return n in self.adj_list
-
-    def dump(self):
-        pp = pprint.PrettyPrinter()        
-        pp.pprint(self.adj_list)
-
-    def addEdge(self, a, b):
-        if not self.contains(a):
-            raise GraphException("node %s not in graph" % a)
-
-        if not self.contains(b):
-            raise GraphException("node %s not in graph" % b)
-
-        s = self.adj_list[a]
-        s.add(b)
-
-        s = self.adj_list[b]
-        s.add(a)
-        
     '''
     return the nodes in the graph, as a list
     '''
     def nodes(self):
         return self.adj_list.keys()
 
-
     def neighbors(self, n):
         if not self.contains(n):
             raise GraphException("node %s not in graph" % n)
 
-        sorted_neighbors = sorted(self.adj_list[n], key=lambda n: n._label)
+        sorted_neighbors = sorted(self.adj_list[n], key=lambda n: n[0]._label)
         for k in sorted_neighbors:
-            yield k
+            yield k[0]
+
+
+class UGraph(DGraph):
+    '''
+    implements an undirected graph.
+    '''
+
+    def __init__(self):
+        super(UGraph, self).__init__()
+
+    def addEdge(self, a, b, cost=1):
+        super(UGraph, self).addEdge(a, b, cost)
+        super(UGraph, self).addEdge(b, a, cost)
 
 ##########    ##########    ##########    ##########    ##########
 
 def _next_unvisited_neighbor(g, n, visited):
-
-    adj_list = sorted(g.adj_list[n], key=lambda n: n._label)
+    adj_list = sorted([x[0] for x in g.adj_list[n]], key=lambda n: n._label)
     for k in adj_list:
         if k not in visited:
             return k
@@ -141,7 +114,7 @@ def _next_unvisited_neighbor(g, n, visited):
 
 def dfs(g, n):
     # non-recursive implementation
-    
+
     if not g.contains(n):
         raise GraphException("node %s not in graph" % n)
     
