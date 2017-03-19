@@ -28,6 +28,39 @@ class TestNode(unittest.TestCase):
         self.assertNotEqual(q, m)
 
 
+class TestDGraph(unittest.TestCase):
+
+    def test_basic(self):
+        g = graph.DGraph()
+        a = graph.Node('a')
+        b = graph.Node('b')
+
+        self.assertFalse(g.contains(a))
+
+        # neither node is in the graph
+        with self.assertRaises(Exception):
+            g.addEdge(a, b)
+
+        g.addNode(a)
+        self.assertTrue(g.contains(a))
+
+        # can't add a node twice
+        with self.assertRaises(graph.GraphException):
+            g.addNode(a)
+
+        # still can't add the edge because b isn't there
+        with self.assertRaises(Exception):
+            g.addEdge(a, b)
+
+        g.addNode(b)
+        g.addEdge(a, b)
+
+        # adding an edge twice is ok
+        g.addEdge(a, b)
+
+        g.dump()
+
+
 #class TestMultipleEdges(unittest.TestCase):
 #    '''
 #    rewrote graph class so that we can have multiple edges between nodes
@@ -39,7 +72,7 @@ class TestNode(unittest.TestCase):
 #        g.addEdge(n1, n2)
 #        g.addEdge(n1, n2)
 
-class TestGraph(unittest.TestCase):
+class TestUGraph(unittest.TestCase):
 
     def test_basic(self):
         g = graph.UGraph()
@@ -263,4 +296,4 @@ class TestGraph(unittest.TestCase):
         gr.addEdge(f, j)
 
         r = graph.bfs_zigzag(gr, a)
-        print r
+        self.assertEqual('abcdefghij', r)

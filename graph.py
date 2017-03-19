@@ -4,6 +4,7 @@ import collections
 class GraphException(Exception):
     pass
 
+
 class Node(object):
 
     def __init__(self, label):
@@ -37,6 +38,43 @@ class Node(object):
     def label(self):
         return self._label
     
+
+class DGraph(object):
+    '''
+    directed graph.
+    '''
+    # implemented as a dictionary that maps nodes to lists of
+    # tuples:  (Node, cost) which indicate the cost of the path.
+
+    def __init__(self):
+        self.adj_list = {}
+
+    def addNode(self, n):
+        if n in self.adj_list:
+            raise GraphException("node %s is already in the graph" % n)
+        self.adj_list[n] = list()
+
+    def contains(self, n):
+        return n in self.adj_list
+
+    def addEdge(self, a, b, cost=1):
+        '''
+        add an edge from a to be with default cost 1
+        '''
+        if not a in self.adj_list:
+            raise GraphException("origin %s not in graph" % a)
+
+        if not b in self.adj_list:
+            raise GraphException("terminus %s not in graph" % b)
+
+        edge = (b, cost)
+        self.adj_list[a].append(edge)
+
+    def dump(self):
+        pp = pprint.PrettyPrinter()        
+        pp.pprint(self.adj_list)
+
+
 class UGraph(object):
     '''
     implements an undirected graph.  there can be at most one # edge
@@ -60,8 +98,7 @@ class UGraph(object):
         return n in self.adj_list
 
     def dump(self):
-        pp = pprint.PrettyPrinter()
-        
+        pp = pprint.PrettyPrinter()        
         pp.pprint(self.adj_list)
 
     def addEdge(self, a, b):
