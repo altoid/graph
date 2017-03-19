@@ -28,15 +28,26 @@ class TestNode(unittest.TestCase):
         self.assertNotEqual(q, m)
 
 
+#class TestMultipleEdges(unittest.TestCase):
+#    '''
+#    rewrote graph class so that we can have multiple edges between nodes
+#    '''
+#    def test_basic(self):
+#        g = graph.UGraph()
+#        n1 = graph.Node('a')
+#        n2 = graph.Node('b')
+#        g.addEdge(n1, n2)
+#        g.addEdge(n1, n2)
+
 class TestGraph(unittest.TestCase):
 
     def test_basic(self):
-        g = graph.Graph()
+        g = graph.UGraph()
         self.assertEqual(0, len(g.adj_list))
         self.assertEqual(0, len(g.nodes()))
 
     def test_addNode(self):
-        g = graph.Graph()
+        g = graph.UGraph()
         n1 = graph.Node('a')
         
         g.addNode(n1)
@@ -63,7 +74,7 @@ class TestGraph(unittest.TestCase):
         
     def test_addEdge(self):
 
-        g = graph.Graph()
+        g = graph.UGraph()
         a = graph.Node('a')
         b = graph.Node('b')
         with self.assertRaises(Exception):
@@ -80,7 +91,7 @@ class TestGraph(unittest.TestCase):
         # make sure that a node's neighbors are
         # presented in sorted order.
 
-        gr = graph.Graph()
+        gr = graph.UGraph()
         a = graph.Node('a')
         b = graph.Node('b')
         c = graph.Node('c')
@@ -117,7 +128,7 @@ class TestGraph(unittest.TestCase):
 
         # cf. https://www.youtube.com/watch?v=zLZhSSXAwxI
 
-        gr = graph.Graph()
+        gr = graph.UGraph()
         a = graph.Node('a')
         b = graph.Node('b')
         c = graph.Node('c')
@@ -162,7 +173,7 @@ class TestGraph(unittest.TestCase):
         # graph with one vertex and no edges
         # graph with one vertex and one (loop) edge
 
-        gr = graph.Graph()
+        gr = graph.UGraph()
         a = graph.Node('a')
         
         outsider = graph.Node('mr_lonely')
@@ -178,7 +189,7 @@ class TestGraph(unittest.TestCase):
 
     def test_bfs(self):
 
-        gr = graph.Graph()
+        gr = graph.UGraph()
         a = graph.Node('a')
         b = graph.Node('b')
         c = graph.Node('c')
@@ -214,7 +225,7 @@ class TestGraph(unittest.TestCase):
         self.assertEqual('abdgefch', r)
 
     def test_zigzag(self):
-        gr = graph.Graph()
+        gr = graph.UGraph()
         a = graph.Node('a')
         b = graph.Node('b')
         c = graph.Node('c')
@@ -253,8 +264,3 @@ class TestGraph(unittest.TestCase):
 
         r = graph.bfs_zigzag(gr, a)
         print r
-
-if __name__ == '__main__':
-    unittest.main()
-
-    

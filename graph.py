@@ -37,8 +37,11 @@ class Node(object):
     def label(self):
         return self._label
     
-class Graph(object):
-
+class UGraph(object):
+    '''
+    implements an undirected graph.  there can be at most one # edge
+    directly connecting two nodes.
+    '''
     # implemented as a dictionary that maps nodes to sets
     # of nodes.  the sets represent adjacent nodes.
     # this is an undirected graph, so for an edge between two
