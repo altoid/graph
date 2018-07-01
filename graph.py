@@ -1,8 +1,6 @@
-import pprint
+from pprint import pprint, pformat
 import collections
 import pdb
-
-pp = pprint.PrettyPrinter()        
 
 class GraphException(Exception):
     pass
@@ -73,10 +71,10 @@ class DGraph(object):
         '''
         add an edge from a to be with default cost 1
         '''
-        if not a in self.adj_list:
+        if a not in self.adj_list:
             raise GraphException("origin %s not in graph" % a)
 
-        if not b in self.adj_list:
+        if b not in self.adj_list:
             raise GraphException("terminus %s not in graph" % b)
 
         edge = (b, cost)
@@ -233,7 +231,6 @@ def getpartitions(g):
         n = unvisited.pop()
         stack.append(n)
         visited.add(n)
-        result.append(n)
 
         # look at node on top of stack
         # if it has an unvisited neighbor,
@@ -250,6 +247,13 @@ def getpartitions(g):
                 stack.append(k)
                 visited.add(k)
                 unvisited.remove(k)
+
+        # visited now has all the nodes in the subgraph.  make a new graph out of them.
+        subgraph = UGraph()
+        for n in visited:
+            subgraph.addnode(n)
+            subgraph.adj_list[n] = list(g.adj_list[n])
+        result.append(subgraph)
 
     return result
 

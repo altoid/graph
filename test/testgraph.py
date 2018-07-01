@@ -331,7 +331,15 @@ class TestUGraph(unittest.TestCase):
         gr.addedge(f, e)
         gr.addedge(e, g)
 
-        graph.getpartitions(gr)
+        subgraphs = graph.getpartitions(gr)
+        self.assertEqual(3, len(subgraphs))
+        results = []
+        for sgr in subgraphs:
+            # gimme a node from the graph, i don't care which
+            nd = next(iter(sgr.nodes()))
+            r = ''.join(sorted(list(graph.dfs(sgr, nd))))
+            results.append(r)
+        self.assertEqual(['abcdefg', 'hi', 'jklm'], sorted(results))
 
     def test_zigzag(self):
         gr = graph.UGraph()
