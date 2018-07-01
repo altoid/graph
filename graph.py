@@ -57,15 +57,19 @@ class DGraph(object):
         # returns the number of nodes in the graph.
         return len(self.adj_list)
 
-    def addNode(self, n):
+    def addnode(self, n):
         if n in self.adj_list:
             raise GraphException("node %s is already in the graph" % n)
         self.adj_list[n] = list()
 
+    def addnodes(self, *nodes):
+        for n in nodes:
+            self.addnode(n)
+
     def contains(self, n):
         return n in self.adj_list
 
-    def addEdge(self, a, b, cost=1):
+    def addedge(self, a, b, cost=1):
         '''
         add an edge from a to be with default cost 1
         '''
@@ -104,9 +108,9 @@ class UGraph(DGraph):
     def __init__(self):
         super(UGraph, self).__init__()
 
-    def addEdge(self, a, b, cost=1):
-        super(UGraph, self).addEdge(a, b, cost)
-        super(UGraph, self).addEdge(b, a, cost)
+    def addedge(self, a, b, cost=1):
+        super(UGraph, self).addedge(a, b, cost)
+        super(UGraph, self).addedge(b, a, cost)
 
 ##########    ##########    ##########    ##########    ##########
 

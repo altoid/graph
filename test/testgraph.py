@@ -35,7 +35,7 @@ class TestDGraph(unittest.TestCase):
         self.assertFalse(g)
         self.assertEqual(0, len(g))
         n = graph.Node('hello')
-        g.addNode(n)
+        g.addnode(n)
         self.assertTrue(g)
         self.assertEqual(1, len(g))
 
@@ -48,52 +48,52 @@ class TestDGraph(unittest.TestCase):
 
         # neither node is in the graph
         with self.assertRaises(Exception):
-            g.addEdge(a, b)
+            g.addedge(a, b)
 
-        g.addNode(a)
+        g.addnode(a)
         self.assertTrue(g.contains(a))
 
         # can't add a node twice
         with self.assertRaises(graph.GraphException):
-            g.addNode(a)
+            g.addnode(a)
 
         # still can't add the edge because b isn't there
         with self.assertRaises(Exception):
-            g.addEdge(a, b)
+            g.addedge(a, b)
 
-        g.addNode(b)
-        g.addEdge(a, b)
+        g.addnode(b)
+        g.addedge(a, b)
 
         # adding an edge twice is ok
-        g.addEdge(a, b)
+        g.addedge(a, b)
 
-    def test_dijkstra(self):
-
-        g = graph.DGraph()
-        n1 = graph.Node('1')
-        n2 = graph.Node('2')
-        n3 = graph.Node('3')
-        n4 = graph.Node('4')
-        n5 = graph.Node('5')
-
-        g.addNode(n1)
-        g.addNode(n2)
-        g.addNode(n3)
-        g.addNode(n4)
-        g.addNode(n5)
-
-        g.addEdge(n1, n2, 10)
-        g.addEdge(n1, n4, 30)
-        g.addEdge(n1, n5, 100)
-
-        g.addEdge(n2, n3, 50)
-
-        g.addEdge(n3, n5, 10)
-
-        g.addEdge(n4, n3, 20)
-        g.addEdge(n4, n5, 60)
-
-        g.dijkstra(g, n1)
+    # def test_dijkstra(self):
+    #
+    #     g = graph.DGraph()
+    #     n1 = graph.Node('1')
+    #     n2 = graph.Node('2')
+    #     n3 = graph.Node('3')
+    #     n4 = graph.Node('4')
+    #     n5 = graph.Node('5')
+    #
+    #     g.addnode(n1)
+    #     g.addnode(n2)
+    #     g.addnode(n3)
+    #     g.addnode(n4)
+    #     g.addnode(n5)
+    #
+    #     g.addedge(n1, n2, 10)
+    #     g.addedge(n1, n4, 30)
+    #     g.addedge(n1, n5, 100)
+    #
+    #     g.addedge(n2, n3, 50)
+    #
+    #     g.addedge(n3, n5, 10)
+    #
+    #     g.addedge(n4, n3, 20)
+    #     g.addedge(n4, n5, 60)
+    #
+    #     g.dijkstra(g, n1)
 
 
 #class TestMultipleEdges(unittest.TestCase):
@@ -104,8 +104,8 @@ class TestDGraph(unittest.TestCase):
 #        g = graph.UGraph()
 #        n1 = graph.Node('a')
 #        n2 = graph.Node('b')
-#        g.addEdge(n1, n2)
-#        g.addEdge(n1, n2)
+#        g.addedge(n1, n2)
+#        g.addedge(n1, n2)
 
 class TestUGraph(unittest.TestCase):
 
@@ -118,21 +118,21 @@ class TestUGraph(unittest.TestCase):
         g = graph.UGraph()
         n1 = graph.Node('a')
         
-        g.addNode(n1)
+        g.addnode(n1)
         self.assertEqual(1, len(g.nodes()))
 
         with self.assertRaises(graph.GraphException):
-            g.addNode(n1)
+            g.addnode(n1)
 
         n2 = graph.Node('a')
 
         with self.assertRaises(graph.GraphException):
-            g.addNode(n2)
+            g.addnode(n2)
 
         self.assertEqual(1, len(g.nodes()))
 
         n3 = graph.Node('b')
-        g.addNode(n3)
+        g.addnode(n3)
         self.assertEqual(2, len(g.nodes()))
 
         self.assertTrue(g.contains(n1))
@@ -147,14 +147,28 @@ class TestUGraph(unittest.TestCase):
         a = graph.Node('a')
         b = graph.Node('b')
         with self.assertRaises(Exception):
-            g.addEdge(a, b)
+            g.addedge(a, b)
 
-        g.addNode(a)
+        g.addnode(a)
         with self.assertRaises(Exception):
-            g.addEdge(a, b)
+            g.addedge(a, b)
 
-        g.addNode(b)
-        g.addEdge(a, b)
+        g.addnode(b)
+        g.addedge(a, b)
+
+    def test_addNodes(self):
+        # new convenience method
+        gr = graph.UGraph()
+        a = graph.Node('a')
+        b = graph.Node('b')
+        c = graph.Node('c')
+        d = graph.Node('d')
+        e = graph.Node('e')
+        f = graph.Node('f')
+        g = graph.Node('g')
+        h = graph.Node('h')
+        gr.addnodes(a, b, c, d, e, f, g, h)
+        self.assertEqual(8, len(gr))
 
     def test_sorting(self):
         # make sure that a node's neighbors are
@@ -170,22 +184,15 @@ class TestUGraph(unittest.TestCase):
         g = graph.Node('g')
         h = graph.Node('h')
 
-        gr.addNode(a)
-        gr.addNode(b)
-        gr.addNode(c)
-        gr.addNode(d)
-        gr.addNode(e)
-        gr.addNode(f)
-        gr.addNode(g)
-        gr.addNode(h)
-        
-        gr.addEdge(a, h)
-        gr.addEdge(a, g)
-        gr.addEdge(a, f)
-        gr.addEdge(a, e)
-        gr.addEdge(a, d)
-        gr.addEdge(a, c)
-        gr.addEdge(a, b)
+        gr.addnodes(a, b, c, d, e, f, g, h)
+
+        gr.addedge(a, h)
+        gr.addedge(a, g)
+        gr.addedge(a, f)
+        gr.addedge(a, e)
+        gr.addedge(a, d)
+        gr.addedge(a, c)
+        gr.addedge(a, b)
 
         k = ""
         for n in gr.neighbors(a):
@@ -207,27 +214,20 @@ class TestUGraph(unittest.TestCase):
         g = graph.Node('g')
         h = graph.Node('h')
 
-        gr.addNode(a)
-        gr.addNode(b)
-        gr.addNode(c)
-        gr.addNode(d)
-        gr.addNode(e)
-        gr.addNode(f)
-        gr.addNode(g)
-        gr.addNode(h)
+        gr.addnodes(a, b, c, d, e, f, g, h)
         
-        gr.addEdge(a, b)
-        gr.addEdge(a, g)
-        gr.addEdge(a, d)
+        gr.addedge(a, b)
+        gr.addedge(a, g)
+        gr.addedge(a, d)
 
-        gr.addEdge(b, e)
-        gr.addEdge(b, f)
+        gr.addedge(b, e)
+        gr.addedge(b, f)
 
-        gr.addEdge(c, f)
-        gr.addEdge(c, h)
+        gr.addedge(c, f)
+        gr.addedge(c, h)
 
-        gr.addEdge(d, f)
-        gr.addEdge(e, g)
+        gr.addedge(d, f)
+        gr.addedge(e, g)
 
         outsider = graph.Node('mr_lonely')
         
@@ -250,11 +250,10 @@ class TestUGraph(unittest.TestCase):
         with self.assertRaises(graph.GraphException):
             graph.bfs(gr, outsider)
 
-        gr.addNode(a)
-        gr.addEdge(a, a)
+        gr.addnode(a)
+        gr.addedge(a, a)
 
         graph.bfs(gr, a)
-        
 
     def test_bfs(self):
 
@@ -268,27 +267,20 @@ class TestUGraph(unittest.TestCase):
         g = graph.Node('g')
         h = graph.Node('h')
 
-        gr.addNode(a)
-        gr.addNode(b)
-        gr.addNode(c)
-        gr.addNode(d)
-        gr.addNode(e)
-        gr.addNode(f)
-        gr.addNode(g)
-        gr.addNode(h)
+        gr.addnodes(a, b, c, d, e, f, g, h)
         
-        gr.addEdge(a, b)
-        gr.addEdge(a, g)
-        gr.addEdge(a, d)
+        gr.addedge(a, b)
+        gr.addedge(a, g)
+        gr.addedge(a, d)
 
-        gr.addEdge(b, e)
-        gr.addEdge(b, f)
+        gr.addedge(b, e)
+        gr.addedge(b, f)
 
-        gr.addEdge(c, f)
-        gr.addEdge(c, h)
+        gr.addedge(c, f)
+        gr.addedge(c, h)
 
-        gr.addEdge(d, f)
-        gr.addEdge(e, g)
+        gr.addedge(d, f)
+        gr.addedge(e, g)
 
         r = graph.bfs(gr, a)
         self.assertEqual('abdgefch', r)
@@ -306,30 +298,21 @@ class TestUGraph(unittest.TestCase):
         i = graph.Node('i')
         j = graph.Node('j')
 
-        gr.addNode(a)
-        gr.addNode(b)
-        gr.addNode(c)
-        gr.addNode(d)
-        gr.addNode(e)
-        gr.addNode(f)
-        gr.addNode(g)
-        gr.addNode(h)
-        gr.addNode(i)
-        gr.addNode(j)
+        gr.addnodes(a, b, c, d, e, f, g, h, i, j)
 
-        gr.addEdge(a, b)
-        gr.addEdge(a, c)
+        gr.addedge(a, b)
+        gr.addedge(a, c)
 
-        gr.addEdge(b, d)
-        gr.addEdge(b, e)
+        gr.addedge(b, d)
+        gr.addedge(b, e)
 
-        gr.addEdge(c, f)
+        gr.addedge(c, f)
 
-        gr.addEdge(d, g)
-        gr.addEdge(d, h)
+        gr.addedge(d, g)
+        gr.addedge(d, h)
 
-        gr.addEdge(f, i)
-        gr.addEdge(f, j)
+        gr.addedge(f, i)
+        gr.addedge(f, j)
 
         r = graph.bfs_zigzag(gr, a)
         self.assertEqual('abcdefghij', r)
