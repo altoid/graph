@@ -109,17 +109,12 @@ class TestDGraph(unittest.TestCase):
 
 class TestUGraph(unittest.TestCase):
 
-    def test_basic(self):
-        g = graph.UGraph()
-        self.assertEqual(0, len(g.adj_list))
-        self.assertEqual(0, len(g.nodes()))
-
     def test_addNode(self):
         g = graph.UGraph()
         n1 = graph.Node('a')
         
         g.addnode(n1)
-        self.assertEqual(1, len(g.nodes()))
+        self.assertEqual(1, len(g))
 
         with self.assertRaises(graph.GraphException):
             g.addnode(n1)
@@ -129,11 +124,11 @@ class TestUGraph(unittest.TestCase):
         with self.assertRaises(graph.GraphException):
             g.addnode(n2)
 
-        self.assertEqual(1, len(g.nodes()))
+        self.assertEqual(1, len(g))
 
         n3 = graph.Node('b')
         g.addnode(n3)
-        self.assertEqual(2, len(g.nodes()))
+        self.assertEqual(2, len(g))
 
         self.assertTrue(g.contains(n1))
         self.assertTrue(g.contains(n2))
@@ -169,6 +164,22 @@ class TestUGraph(unittest.TestCase):
         h = graph.Node('h')
         gr.addnodes(a, b, c, d, e, f, g, h)
         self.assertEqual(8, len(gr))
+
+    def test_nodes_generator(self):
+        # new convenience method
+        gr = graph.UGraph()
+        a = graph.Node('a')
+        b = graph.Node('b')
+        c = graph.Node('c')
+        d = graph.Node('d')
+        e = graph.Node('e')
+        f = graph.Node('f')
+        g = graph.Node('g')
+        h = graph.Node('h')
+        gr.addnodes(a, b, c, d, e, f, g, h)
+        control = [a, b, c, d, e, f, g, h]
+        nodes = sorted([n for n in gr.nodes()])
+        self.assertEqual(control, nodes)
 
     def test_sorting(self):
         # make sure that a node's neighbors are
@@ -284,6 +295,43 @@ class TestUGraph(unittest.TestCase):
 
         r = graph.bfs(gr, a)
         self.assertEqual('abdgefch', r)
+
+    def test_getpartitions(self):
+        # sedgewick, p. 374
+
+        gr = graph.UGraph()
+        a = graph.Node('a')
+        b = graph.Node('b')
+        c = graph.Node('c')
+        d = graph.Node('d')
+        e = graph.Node('e')
+        f = graph.Node('f')
+        g = graph.Node('g')
+        h = graph.Node('h')
+        i = graph.Node('i')
+        j = graph.Node('j')
+        k = graph.Node('k')
+        l = graph.Node('l')
+        m = graph.Node('m')
+
+        gr.addnodes(a, b, c, d, e, f, g, h, i, j, k, l, m)
+
+        gr.addedge(h, i)
+
+        gr.addedge(j, k)
+        gr.addedge(j, m)
+        gr.addedge(j, l)
+        gr.addedge(l, m)
+
+        gr.addedge(a, b)
+        gr.addedge(a, c)
+        gr.addedge(a, f)
+        gr.addedge(a, g)
+        gr.addedge(d, f)
+        gr.addedge(f, e)
+        gr.addedge(e, g)
+
+        graph.getpartitions(gr)
 
     def test_zigzag(self):
         gr = graph.UGraph()

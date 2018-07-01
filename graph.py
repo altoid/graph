@@ -17,7 +17,7 @@ class Node(object):
         return '%s' % self._label
 
     def __repr__(self):
-        return 'Node(%s)' % (self._label)
+        return "Node('%s')" % (self._label)
 
     def __eq__(self, other):
         if not isinstance(other, Node):
@@ -89,7 +89,8 @@ class DGraph(object):
     return the nodes in the graph, as a list
     '''
     def nodes(self):
-        return self.adj_list.keys()
+        for k in self.adj_list.keys():
+            yield k
 
     def neighbors(self, n):
         if not self.contains(n):
@@ -114,11 +115,13 @@ class UGraph(DGraph):
 
 ##########    ##########    ##########    ##########    ##########
 
+
 def _next_unvisited_neighbor(g, n, visited):
     adj_list = sorted([x[0] for x in g.adj_list[n]], key=lambda n: n._label)
     for k in adj_list:
         if k not in visited:
             return k
+
 
 def dfs(g, n):
     # non-recursive implementation
@@ -150,7 +153,8 @@ def dfs(g, n):
             result += str(k)
 
     return result
-            
+
+
 def bfs(g, n):
     # non-recursive implementation
 
@@ -209,6 +213,46 @@ def bfs_zigzag(g, n):
                 result += str(k)
 
     return result
+
+
+def getpartitions(g):
+    # for the given graph, return its disjoint subgraphs.  if the graph isn't partitioned, just return the the
+    # graph.  if it is, return one node from each subgraph.
+    #
+    # todo - this will only work for undirected graphs.  if the graph is directed, we can't traverse the subgraphs
+    # todo - whose member nodes we are returning.
+
+    result = []
+
+    # idea:  pick a node and do DFS on the graph.  if there are any nodes we still haven't visited, do it again.
+    unvisited = set([n for n in g.nodes()])
+    while len(unvisited) > 0:
+        stack = []
+        visited = set()
+
+        n = unvisited.pop()
+        stack.append(n)
+        visited.add(n)
+        result.append(n)
+
+        # look at node on top of stack
+        # if it has an unvisited neighbor,
+        # mark it visited and put it at top of stack
+        # otherwise pull it off
+
+        while len(stack) > 0:
+            top = stack[-1]
+            # get next unvisited neighbor
+            k = _next_unvisited_neighbor(g, top, visited)
+            if k is None:
+                stack.pop()
+            else:
+                stack.append(k)
+                visited.add(k)
+                unvisited.remove(k)
+
+    return result
+
 
 def dijkstra(g, n):
     '''
