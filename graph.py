@@ -23,14 +23,11 @@ class Node(object):
         if not isinstance(other, Node):
             raise NotImplemented
 
-        if self._label != other._label:
-            return False
-
-        return True
+        return self._label == other._label
 
     def __hash__(self):
         return hash(self._label)
-    
+
     def show_ids(self, tag):
         print '=' * 11, tag, '=' * 11
         print repr(self)
@@ -51,6 +48,14 @@ class DGraph(object):
 
     def __init__(self):
         self.adj_list = {}
+
+    def __nonzero__(self):
+        # returns true if the graph has > 0 nodes
+        return len(self.adj_list) > 0
+
+    def __len__(self):
+        # returns the number of nodes in the graph.
+        return len(self.adj_list)
 
     def addNode(self, n):
         if n in self.adj_list:
@@ -110,7 +115,6 @@ def _next_unvisited_neighbor(g, n, visited):
     for k in adj_list:
         if k not in visited:
             return k
-    return None
 
 def dfs(g, n):
     # non-recursive implementation

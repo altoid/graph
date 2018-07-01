@@ -30,6 +30,15 @@ class TestNode(unittest.TestCase):
 
 class TestDGraph(unittest.TestCase):
 
+    def test_bool(self):
+        g = graph.UGraph()
+        self.assertFalse(g)
+        self.assertEqual(0, len(g))
+        n = graph.Node('hello')
+        g.addNode(n)
+        self.assertTrue(g)
+        self.assertEqual(1, len(g))
+
     def test_basic(self):
         g = graph.DGraph()
         a = graph.Node('a')
