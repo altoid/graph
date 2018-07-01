@@ -26,6 +26,12 @@ class Node(object):
     def __hash__(self):
         return hash(self._label)
 
+    def __cmp__(self, other):
+        if not isinstance(other, Node):
+            raise NotImplemented
+
+        return cmp(self._label, other._label)
+
     def show_ids(self, tag):
         print '=' * 11, tag, '=' * 11
         print repr(self)

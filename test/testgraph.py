@@ -3,6 +3,7 @@
 import unittest
 import graph
 
+
 class TestNode(unittest.TestCase):
 
     def test_init(self):
@@ -26,6 +27,15 @@ class TestNode(unittest.TestCase):
         
         q = graph.Node('ueoa')
         self.assertNotEqual(q, m)
+
+    def test_cmp(self):
+        a = graph.Node('aaa')
+        b = graph.Node('bbb')
+        c = graph.Node('ccc')
+        self.assertTrue(b == b)
+        self.assertTrue(a < b)
+        self.assertTrue(b < c)
+        self.assertTrue(c > a)
 
 
 class TestDGraph(unittest.TestCase):
