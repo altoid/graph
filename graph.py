@@ -41,7 +41,32 @@ class Node(object):
     @property
     def label(self):
         return self._label
-    
+
+
+class Edge(object):
+    def __init__(self, origin, terminus, cost):
+        self._origin = origin
+        self._terminus = terminus
+        self._cost = cost
+
+    def __str__(self):
+        return "(%s - %s - %s)" % (self._origin, self._cost, self._terminus)
+
+    def __hash__(self):
+        return hash((self.origin, self.terminus, self.cost))
+
+    @property
+    def origin(self):
+        return self._origin
+
+    @property
+    def terminus(self):
+        return self._terminus
+
+    @property
+    def cost(self):
+        return self._cost
+
 
 class DGraph(object):
     '''
@@ -116,6 +141,17 @@ class UGraph(DGraph):
     def addedge(self, a, b, cost=1):
         super(UGraph, self).addedge(a, b, cost)
         super(UGraph, self).addedge(b, a, cost)
+
+    def edges(self):
+        # since this is an undirected graph, we have to be careful about not putting back-and-forth edges into the
+        # result set.  we'll put edges in where the origin is lexicographically less than the terminus
+
+        for n in self.nodes():
+            for arc in self.adj_list[n]:
+                a1 = n
+                a2 = arc[0]
+                if a1 < a2:
+                    yield Edge(a1, a2, arc[1])
 
 ##########    ##########    ##########    ##########    ##########
 

@@ -119,6 +119,44 @@ class TestDGraph(unittest.TestCase):
 
 class TestUGraph(unittest.TestCase):
 
+    def setUp(self):
+        # sedgewick, p. 374
+
+        gr = graph.UGraph()
+        a = graph.Node('a')
+        b = graph.Node('b')
+        c = graph.Node('c')
+        d = graph.Node('d')
+        e = graph.Node('e')
+        f = graph.Node('f')
+        g = graph.Node('g')
+        h = graph.Node('h')
+        i = graph.Node('i')
+        j = graph.Node('j')
+        k = graph.Node('k')
+        l = graph.Node('l')
+        m = graph.Node('m')
+
+        gr.addnodes(a, b, c, d, e, f, g, h, i, j, k, l, m)
+
+        gr.addedge(h, i)
+
+        gr.addedge(j, k)
+        gr.addedge(j, m)
+        gr.addedge(j, l)
+        gr.addedge(l, m)
+
+        gr.addedge(a, b)
+        gr.addedge(a, c)
+        gr.addedge(a, f)
+        gr.addedge(a, g)
+        gr.addedge(d, f)
+        gr.addedge(f, e)
+        gr.addedge(e, g)
+
+        self.sedgewick = gr
+
+
     def test_addNode(self):
         g = graph.UGraph()
         n1 = graph.Node('a')
@@ -309,39 +347,7 @@ class TestUGraph(unittest.TestCase):
     def test_getpartitions(self):
         # sedgewick, p. 374
 
-        gr = graph.UGraph()
-        a = graph.Node('a')
-        b = graph.Node('b')
-        c = graph.Node('c')
-        d = graph.Node('d')
-        e = graph.Node('e')
-        f = graph.Node('f')
-        g = graph.Node('g')
-        h = graph.Node('h')
-        i = graph.Node('i')
-        j = graph.Node('j')
-        k = graph.Node('k')
-        l = graph.Node('l')
-        m = graph.Node('m')
-
-        gr.addnodes(a, b, c, d, e, f, g, h, i, j, k, l, m)
-
-        gr.addedge(h, i)
-
-        gr.addedge(j, k)
-        gr.addedge(j, m)
-        gr.addedge(j, l)
-        gr.addedge(l, m)
-
-        gr.addedge(a, b)
-        gr.addedge(a, c)
-        gr.addedge(a, f)
-        gr.addedge(a, g)
-        gr.addedge(d, f)
-        gr.addedge(f, e)
-        gr.addedge(e, g)
-
-        subgraphs = graph.getpartitions(gr)
+        subgraphs = graph.getpartitions(self.sedgewick)
         self.assertEqual(3, len(subgraphs))
         results = []
         for sgr in subgraphs:
@@ -350,6 +356,10 @@ class TestUGraph(unittest.TestCase):
             r = ''.join(sorted(list(graph.dfs(sgr, nd))))
             results.append(r)
         self.assertEqual(['abcdefg', 'hi', 'jklm'], sorted(results))
+
+    def test_edges(self):
+        for e in self.sedgewick.edges():
+            print e
 
     def test_zigzag(self):
         gr = graph.UGraph()
