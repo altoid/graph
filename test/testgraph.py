@@ -128,7 +128,6 @@ class TestUGraph(unittest.TestCase):
 
         self.sedgewick = gr
 
-
     def test_addNode(self):
         g = graph.UGraph()
         n1 = graph.Node('a')
