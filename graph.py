@@ -348,13 +348,3 @@ def kruskal(g):
     for ex in mstedges:
         returnme.addedge(ex.origin, ex.terminus, ex.cost)
     return returnme
-
-
-def dijkstra(g, n):
-    '''
-    compute the minimum cost path from n in g to every other node in g.
-    n must be in g and the costs on all arcs must be nonnegative.
-    '''
-
-    if not g.contains(n):
-        raise GraphException("node %s not in graph" % n)
