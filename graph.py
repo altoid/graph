@@ -55,6 +55,12 @@ class Edge(object):
     def __hash__(self):
         return hash((self.origin, self.terminus, self.cost))
 
+    def __eq__(self, other):
+        if not isinstance(other, Edge):
+            raise NotImplemented
+
+        return self.origin == other.origin and self.terminus == other.terminus and self.cost == other.cost
+
     @property
     def origin(self):
         return self._origin
@@ -112,7 +118,7 @@ class DGraph(object):
         self.adj_list[a].append(edge)
 
     def dump(self):
-        pp.pprint(self.adj_list)
+        pprint(self.adj_list)
 
     '''
     return the nodes in the graph, as a list
@@ -128,6 +134,11 @@ class DGraph(object):
         sorted_neighbors = sorted(self.adj_list[n], key=lambda n: n[0]._label)
         for k in sorted_neighbors:
             yield k[0]
+
+    def edges(self):
+        for n in self.nodes():
+            for arc in self.adj_list[n]:
+                yield Edge(n, arc[0], arc[1])
 
 
 class UGraph(DGraph):
@@ -298,6 +309,45 @@ def getpartitions(g):
         result.append(subgraph)
 
     return result
+
+
+def kruskal(g):
+    # return a MST for this graph using kruskal's algorithm.
+
+    # make a dict mapping each node to a set containing that node.
+    lookup = {}
+    for n in g.nodes():
+        lookup[n] = set([n])
+
+    mstedges = set()
+    allnodes = set([n for n in g.nodes()])
+    edges = sorted([e for e in g.edges()], key=lambda x: x.cost)
+    for ex in edges:
+        sorigin = lookup[ex.origin]
+        sterminus = lookup[ex.terminus]
+
+        # if the nodes of this edge are already in some set, skip it, because we'd introduce a cycle.
+        if ex.origin in sorigin and ex.terminus in sorigin:
+            continue
+
+        if ex.origin in sterminus and ex.terminus in sterminus:
+            continue
+
+        tmpset = sorigin | sterminus
+        for n in tmpset:
+            lookup[n] = tmpset
+        mstedges.add(ex)
+
+        if tmpset <= allnodes and allnodes <= tmpset:
+            break
+
+    returnme = UGraph()
+    for n in allnodes:
+        returnme.addnode(n)
+
+    for ex in mstedges:
+        returnme.addedge(ex.origin, ex.terminus, ex.cost)
+    return returnme
 
 
 def dijkstra(g, n):

@@ -392,3 +392,32 @@ class TestUGraph(unittest.TestCase):
 
         r = graph.bfs_zigzag(gr, a)
         self.assertEqual('abcdefghij', r)
+
+    def test_kruskal(self):
+        # https://en.wikipedia.org/wiki/Kruskal%27s_algorithm
+        gr = graph.UGraph()
+        a = graph.Node('a')
+        b = graph.Node('b')
+        c = graph.Node('c')
+        d = graph.Node('d')
+        e = graph.Node('e')
+        f = graph.Node('f')
+        g = graph.Node('g')
+
+        gr.addnodes(a, b, c, d, e, f, g)
+
+        gr.addedge(a, d, 5)
+        gr.addedge(a, b, 7)
+        gr.addedge(b, c, 8)
+        gr.addedge(b, d, 9)
+        gr.addedge(b, e, 7)
+        gr.addedge(c, e, 5)
+        gr.addedge(d, e, 15)
+        gr.addedge(d, f, 6)
+        gr.addedge(f, e, 8)
+        gr.addedge(e, g, 9)
+        gr.addedge(f, g, 11)
+
+        mst = graph.kruskal(gr)
+        for ex in mst.edges():
+            print ex
