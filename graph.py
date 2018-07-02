@@ -338,7 +338,7 @@ def kruskal(g):
             lookup[n] = tmpset
         mstedges.add(ex)
 
-        if tmpset <= allnodes and allnodes <= tmpset:
+        if tmpset == allnodes:
             break
 
     returnme = UGraph()
