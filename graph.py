@@ -1,6 +1,5 @@
 from pprint import pprint, pformat
 import collections
-import pdb
 
 class GraphException(Exception):
     pass
