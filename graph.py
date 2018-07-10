@@ -1,5 +1,6 @@
 from pprint import pprint, pformat
 import collections
+import random
 
 class GraphException(Exception):
     pass
@@ -138,6 +139,49 @@ class DGraph(object):
         for n in self.nodes():
             for arc in self.adj_list[n]:
                 yield Edge(n, arc[0], arc[1])
+
+    def dijkstra(self, n):
+        # single-source shortest pair problem
+        if n not in self.adj_list:
+            raise GraphException("node %s not in graph" % n)
+
+        bigs = set([n])
+        #print "S: %s" % bigs
+        bigv = {k for k in self.adj_list.keys()}
+        diff = bigv - bigs
+
+        # construct dict mapping (origin, terminus) to cost
+        bigc = {}
+        for e in self.edges():
+            bigc[(e.origin, e.terminus)] = e.cost
+        #print "bigc:  %s" % pformat(bigc)
+        bigd = {x: None for x in diff}
+        for x in self.adj_list[n]:
+            if (n, x[0]) in bigc:
+                bigd[x[0]] = bigc[(n, x[0])]
+
+        while len(bigs) < len(self):
+            # find the node in diff where v (cost) is minimum
+
+            x = filter(lambda x: bigd[x] is not None, diff)
+            x = [(i, bigd[i]) for i in x]
+            #print pformat(x)
+            w, mincost = min(x, key=lambda x: x[1])
+            #print w, mincost
+            diff.remove(w)
+            bigs.add(w)
+            #print "S: %s" % bigs
+            for v in diff:
+                if (w, v) not in bigc:
+                    continue
+
+                if not bigd[v]:
+                    bigd[v] = bigd[w] + bigc[(w, v)]
+                    continue
+
+                bigd[v] = min(bigd[v], bigd[w] + bigc[(w, v)])
+
+        print "d: %s" % pformat(bigd)
 
 
 class UGraph(DGraph):

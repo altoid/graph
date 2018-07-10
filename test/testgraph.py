@@ -77,6 +77,26 @@ class TestDGraph(unittest.TestCase):
         # adding an edge twice is ok
         g.addedge(a, b)
 
+    def test_dijkstra(self):
+        a = graph.Node('1')
+        b = graph.Node('2')
+        c = graph.Node('3')
+        d = graph.Node('4')
+        e = graph.Node('5')
+
+        gr = graph.DGraph()
+        gr.addnodes(a, b, c, d, e)
+        gr.addedge(a, b, 10)
+        gr.addedge(a, d, 30)
+        gr.addedge(a, e, 100)
+        gr.addedge(b, c, 50)
+        gr.addedge(c, e, 10)
+        gr.addedge(d, e, 60)
+        gr.addedge(d, c, 20)
+
+        gr.dijkstra(a)
+
+
 
 #class TestMultipleEdges(unittest.TestCase):
 #    '''
